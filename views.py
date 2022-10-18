@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 from .pushdata import push2dB
-from .user_login import Login
+from .customer_login import Login
 from .token_validation import token_authentication
 
 
