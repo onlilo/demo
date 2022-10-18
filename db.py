@@ -1,5 +1,5 @@
 import psycopg2
-from config import db_config
+from .config import db_config
 
 
 # db_config = {'user' : 'postgres',
