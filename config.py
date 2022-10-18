@@ -21,3 +21,4 @@ db_config = {'user' : os.getenv('user'),
             'port' : os.getenv('port'),
             'database' : os.getenv('database')
             }
+
