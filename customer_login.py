@@ -13,14 +13,6 @@ import pandas as pd
 from datetime import datetime, timedelta
 from .config import db_config,jwt_config
 
-
-
-# import jwt
-# encoded_jwt = jwt.encode({"some": "payload"}, JWT_SECRET, algorithm="HS256")
-# print(encoded_jwt)
-# jwt.decode(encoded_jwt, JWT_SECRET, algorithms=["HS256"])
-
-
 class Login(object):
     def __init__(self,data):
         self.data = data
@@ -56,14 +48,11 @@ class Login(object):
                     'exp': datetime.utcnow() + timedelta(seconds=self.JWT_EXP_DELTA_SECONDS)
                     }
                     jwt_token = jwt.encode(payload, self.JWT_SECRET, algorithm = self.JWT_ALGORITHM)
-                    # token = jwt_token.decode('utf-8')
-                    return {"token":jwt_token,"status_code":200}
+                    token = jwt_token.decode('utf-8')
+                    return {"token":token,"status_code":200}
                 else:
-                    return {"status":"Fail","status_code":500,"message":"ivde potty"}                    
-        except Exception as e:
+                    return {"status":"Fail","status_code":500}                    
+        except:
             self.conn.close()
-            return {"status":"Fail","status_code":500,"message":str(e)}
+            return {"status":"Fail","status_code":500}
         
-# data = {"username":"pawzmo","password":"pawzmo123"}
-# classs = Login(data)
-# result = classs.user_authentication()

@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 from .pushdata import push2dB
-from customer_login import Login
+from .customer_login import Login
 from .token_validation import token_authentication
 
 
@@ -31,5 +31,5 @@ def login(request):
             login_class = Login(json_data)
             result = login_class.user_authentication()
             return JsonResponse(result, safe=False)
-    except Exception as e:
-        return JsonResponse({"status_code":500,"status":"Fail","message":"avde potty","reason":str(e)})
+    except:
+        return JsonResponse({"status_code":500,"status":"Fail"})
