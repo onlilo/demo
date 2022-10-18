@@ -13,6 +13,7 @@ def health(request):
     return JsonResponse({"status":200,"API":"Finally Running"})
 
 @csrf_exempt
+@token_authentication
 def data2dB(request):
     try:
         if 'application/json' in request.META['CONTENT_TYPE']:
