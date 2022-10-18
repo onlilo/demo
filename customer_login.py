@@ -56,14 +56,13 @@ class Login(object):
                     'exp': datetime.utcnow() + timedelta(seconds=self.JWT_EXP_DELTA_SECONDS)
                     }
                     jwt_token = jwt.encode(payload, self.JWT_SECRET, algorithm = self.JWT_ALGORITHM)
-                    token = jwt_token.decode('utf-8')
+                    # token = jwt_token.decode('utf-8')
                     return {"token":jwt_token,"status_code":200}
                 else:
-                    return {"status":"Fail","status_code":500}                    
+                    return {"status":"Fail","status_code":500,"message":"ivde potty"}                    
         except Exception as e:
-            print(str(e))
             self.conn.close()
-            return {"status":"Fail","status_code":500}
+            return {"status":"Fail","status_code":500,"message":str(e)}
         
 # data = {"username":"pawzmo","password":"pawzmo123"}
 # classs = Login(data)

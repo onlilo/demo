@@ -32,4 +32,4 @@ def login(request):
             result = login_class.user_authentication()
             return JsonResponse(result, safe=False)
     except:
-        return JsonResponse({"status_code":500,"status":"Fail"})
+        return JsonResponse({"status_code":500,"status":"Fail","message":"avde potty"})
