@@ -1,11 +1,12 @@
 import psycopg2
+from config import db_config
 
 
-db_config = {'user' : 'postgres',
-            'password' : 'onlilo123',
-            'host' :'database-1.cmqsecpalehs.ap-south-1.rds.amazonaws.com',
-            'port' : '5432'
-            }
+# db_config = {'user' : 'postgres',
+#             'password' : 'onlilo123',
+#             'host' :'database-1.cmqsecpalehs.ap-south-1.rds.amazonaws.com',
+#             'port' : '5432'
+#             }
 
 def push2dB(body):
     try:   
