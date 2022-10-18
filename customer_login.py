@@ -51,8 +51,8 @@ class Login(object):
                     token = jwt_token.decode('utf-8')
                     return {"token":token,"status_code":200}
                 else:
-                    return {"status":"Fail","status_code":500}                    
+                    return {"Status":"Fail","status_code":500}                    
         except:
             self.conn.close()
-            return {"status":"Fail","status_code":500}
+            return {"Status":"Fail","status_code":500}
         

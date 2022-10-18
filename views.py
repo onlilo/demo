@@ -10,7 +10,7 @@ from .token_validation import token_authentication
 
 
 def health(request):
-    return JsonResponse({"status":200,"API":"Finally Running"})
+    return JsonResponse({"status":200,"Message":"API Running"})
 
 @csrf_exempt
 @token_authentication
@@ -20,8 +20,8 @@ def data2dB(request):
             json_data= json.loads(request.body)
             result = push2dB(json_data)
             return JsonResponse({"Message":result["message"]})
-    except Exception as e:
-            return JsonResponse ({"message":str(e)})
+    except:
+            return JsonResponse ({"status":"Fail","status":"Fail"})
 
 @csrf_exempt
 #@api_view(['POST'])
