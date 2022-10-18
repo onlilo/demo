@@ -22,3 +22,4 @@ db_config = {'user' : os.getenv('user'),
             'database' : os.getenv('database')
             }
 
+
