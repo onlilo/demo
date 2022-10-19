@@ -41,10 +41,10 @@ def login(request):
 def device_list(request):
     try:
         if 'application/json' in request.META['CONTENT_TYPE']:
-            json_data= json.loads(request.body)            
+            token = request.headers['Authorization'].split()[1]
+            json_data= {"token":token}
             device_class = Device(json_data)
             result = device_class.device_details()
-            result = {"key":request.headers['Authorization'].split()[1]}
             return JsonResponse(result,safe=False)
     except Exception as e:
             return JsonResponse ({"status":"Fail","status_code":500,"error":str(e)})
