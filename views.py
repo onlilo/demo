@@ -45,5 +45,5 @@ def device_list(request):
             device_class = Device(json_data)
             result = device_class.device_details(json_data)
             return JsonResponse(result,safe=False)
-    except:
-            return JsonResponse ({"status":"Fail","status_code":500})
+    except Exception as e:
+            return JsonResponse ({"status":"Fail","status_code":500,"error":str(e)})
