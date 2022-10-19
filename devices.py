@@ -41,7 +41,7 @@ class Device(object):
     def modify_device_details(self):
         try:
             device_id = self.data["id"]
-            select_qry = """SELECT "battery","last_active" FROM public.devices where id = %(device_id)s;"""
+            select_qry = """SELECT "id","name","is_default","battery","last_active" FROM public.devices where id = %(device_id)s;"""
             select_qry_dict={"device_id":int(device_id)}
             device_data =  pd.read_sql(select_qry,self.conn,params =select_qry_dict)
             self.conn.close()
