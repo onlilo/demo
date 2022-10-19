@@ -25,23 +25,37 @@ class Device(object):
                                 port = db_config['port']
                                 )
     def device_details(self):
-        token = self.data["token"]
-        user_id = jwt.decode(token, options={"verify_signature": False})["user_id"]
-        select_qry = """SELECT "id","name","is_default","battery","last_active" FROM public.devices where user_id = %(user_id)s;"""
-        select_qry_dict={"user_id":int(user_id)}
-        device_data =  pd.read_sql(select_qry,self.conn,params =select_qry_dict)
-        self.conn.close()
-        if device_data.empty:
-            return {"status":"Fail","status_code":401,"Message":"No devices registered"}        
-        else:
-            return(device_data.to_dict('records'))
-
+        try:
+            token = self.data["token"]
+            user_id = jwt.decode(token, options={"verify_signature": False})["user_id"]
+            select_qry = """SELECT "id","name","is_default","battery","last_active" FROM public.devices where user_id = %(user_id)s;"""
+            select_qry_dict={"user_id":int(user_id)}
+            device_data =  pd.read_sql(select_qry,self.conn,params =select_qry_dict)
+            self.conn.close()
+            if device_data.empty:
+                return {"status":"Fail","status_code":401,"Message":"No devices registered"}        
+            else:
+                return(device_data.to_dict('records'))
+        except:
+            {"Status":"Fail","status_code":500}
+    def modify_device_details(self):
+        try:
+            device_id = self.data["id"]
+            select_qry = """SELECT "battery","last_active" FROM public.devices where id = %(device_id)s;"""
+            select_qry_dict={"device_id":int(device_id)}
+            device_data =  pd.read_sql(select_qry,self.conn,params =select_qry_dict)
+            self.conn.close()
+            return device_data.to_dict('records')
+        except:
+            {"Status":"Fail","status_code":500}
+        
 # data = {
 #     "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2NjYxNzQwNDJ9.z5L2634hJWnk_6od9QLPayRbaStI-pP27Om2Z7li8Lo",
-#     "status_code": 200
+#     "status_code": 200,
+#     "id":3
 # }            
-# classs = Devices(data)
-# result = classs.device_details()
+# classs = Device(data)
+# result = classs.modify_device_details()
 # print(result)
 
 
