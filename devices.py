@@ -13,7 +13,7 @@ import pandas as pd
 from datetime import datetime, timedelta
 from .config import db_config,jwt_config
 
-class Devices(object):
+class Device(object):
     def __init__(self,data):
         self.data = data
         self.JWT_SECRET = jwt_config["JWT_SECRET"]

@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .pushdata import push2dB
 from .customer_login import Login
 from .token_validation import token_authentication
-from .devices import Devices
+from .devices import Device
 
 
 def health(request):
@@ -38,11 +38,11 @@ def login(request):
     
 @csrf_exempt
 @token_authentication
-def devices(request):
+def device_list(request):
     try:
         if 'application/json' in request.META['CONTENT_TYPE']:
             json_data= json.loads(request.body)
-            device_class = Devices(json_data)
+            device_class = Device(json_data)
             result = device_class.device_details(json_data)
             return JsonResponse(result,safe=False)
     except:
