@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .pushdata import push2dB
 from .customer_login import Login
 from .token_validation import token_authentication
+from .devices import Devices
 
 
 def health(request):
@@ -21,7 +22,7 @@ def data2dB(request):
             result = push2dB(json_data)
             return JsonResponse({"Message":result["message"]})
     except:
-            return JsonResponse ({"status":"Fail","status":"Fail"})
+            return JsonResponse ({"status":"Fail","status_code":500})
 
 @csrf_exempt
 #@api_view(['POST'])
@@ -34,3 +35,15 @@ def login(request):
             return JsonResponse(result, safe=False)
     except:
         return JsonResponse({"status_code":500,"status":"Fail"})
+    
+@csrf_exempt
+@token_authentication
+def devices(request):
+    try:
+        if 'application/json' in request.META['CONTENT_TYPE']:
+            json_data= json.loads(request.body)
+            device_class = Devices(json_data)
+            result = device_class.device_details(json_data)
+            return JsonResponse(result,safe=False)
+    except:
+            return JsonResponse ({"status":"Fail","status_code":500})
