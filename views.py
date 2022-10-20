@@ -60,3 +60,16 @@ def update_device(request):
             return JsonResponse(result,safe=False)
     except:
             return JsonResponse ({"status":"Fail","status_code":500})
+        
+@csrf_exempt
+@token_authentication
+def activity_details(request):
+    try:
+        if 'application/json' in request.META['CONTENT_TYPE']:
+            token = request.headers['Authorization'].split()[1]
+            json_data= {"token":token}
+            device_class = Device(json_data)
+            result = device_class.activity_list()
+            return JsonResponse(result,safe=False)
+    except :
+            return JsonResponse ({"status":"Fail","status_code":500})

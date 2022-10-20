@@ -10,4 +10,5 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('get_devices/',views.device_list,name='device_list'),
     path('change_device/',views.update_device,name='update_device'),
+    path('get_activities/',views.activity_details,name='activity_details'),
 ]

@@ -37,7 +37,8 @@ class Device(object):
             else:
                 return(device_data.to_dict('records'))
         except:
-            {"Status":"Fail","status_code":500}
+            return {"Status":"Fail","status_code":500}
+            
     def modify_device_details(self):
         try:
             device_id = self.data["id"]
@@ -47,7 +48,17 @@ class Device(object):
             self.conn.close()
             return device_data.to_dict('records')
         except:
-            {"Status":"Fail","status_code":500}
+            return {"Status":"Fail","status_code":500}
+            
+    def activity_list(self):
+        try:
+            select_qry = """SELECT "Id","activity" FROM public.activities"""
+            select_qry_dict={}
+            device_data =  pd.read_sql(select_qry,self.conn,params =select_qry_dict)
+            self.conn.close()      
+            return(device_data.to_dict('records'))
+        except:
+            return {"Status":"Fail","status_code":500}
         
 # data = {
 #     "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2NjYxNzQwNDJ9.z5L2634hJWnk_6od9QLPayRbaStI-pP27Om2Z7li8Lo",
@@ -55,7 +66,7 @@ class Device(object):
 #     "id":3
 # }            
 # classs = Device(data)
-# result = classs.modify_device_details()
+# result = classs.activity_list()
 # print(result)
 
 
