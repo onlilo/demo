@@ -6,12 +6,9 @@ Created on Fri Oct 21 09:20:11 2022
 @author: arjun
 """
 
-import jwt
 import psycopg2
-import hashlib, binascii
 import pandas as pd
-from datetime import datetime, timedelta
-from .config import db_config,jwt_config
+from .config import db_config
 
 class ViewData(object):
     def __init__(self,data):
@@ -52,10 +49,10 @@ class ViewData(object):
             self.conn.commit()
             self.cur.close()
             self.conn.close()
-            return True
+            return {"Status":"Success","status_code":200}
         except:
             self.cur.close()
             self.conn.close()
-            return False
+            return {"Status":"Fail","status_code":500}
         
 
