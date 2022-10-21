@@ -12,4 +12,5 @@ urlpatterns = [
     path('change_device/',views.update_device,name='update_device'),
     path('get_activities/',views.activity_details,name='activity_details'),
     path('get_sourcedata/',views.view_sourcedata,name='view_sourcedata'),
+    path('update_sourcedata/',views.edit_sourcedata,name='edit_sourcedata'),
 ]

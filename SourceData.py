@@ -22,6 +22,8 @@ class ViewData(object):
                                 host = db_config['host'],
                                 port = db_config['port']
                                 )    
+        self.cur = self.conn.cursor()
+        
     def view_data(self):
         try:
             device_id = self.data["id"]
@@ -34,7 +36,26 @@ class ViewData(object):
             source_data = source_data.to_dict('records')
             self.conn.close()          
             return source_data
-        except Exception as e:
+        except:
             self.conn.close()
-            return {"Status":"Fail","status_code":500,"message":str(e)}
+            return {"Status":"Fail","status_code":500}
         
+    def update_data(self):
+        try:
+            device_id = self.data["device_id"]
+            date = self.data["Date"]
+            time = self.data["Time"]
+            activity = self.data["activity"]
+            update_query = """UPDATE public.readings SET "activity" = %(activity)s WHERE "Date"= %(date)s AND "Time"= %(time)s AND "device_id"= %(device_id)s;"""
+            update_qry_dict={"device_id":int(device_id),"date":date,"time":time,"activity":activity}
+            self.cur.execute(update_query,update_qry_dict)
+            self.conn.commit()
+            self.cur.close()
+            self.conn.close()
+            return True
+        except:
+            self.cur.close()
+            self.conn.close()
+            return False
+        
+
