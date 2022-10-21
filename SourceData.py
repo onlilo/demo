@@ -30,6 +30,7 @@ class ViewData(object):
             select_qry_dict={"device_id":int(device_id),"date":date}
             source_data =  pd.read_sql(select_qry,self.conn,params =select_qry_dict)
             source_data = source_data.fillna("")
+            source_data = source_data.drop(["id"], axis=1)
             source_data = source_data.to_dict('records')
             self.conn.close()          
             return source_data
