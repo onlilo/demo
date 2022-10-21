@@ -10,11 +10,11 @@ def push2dB(body):
                                 connect_timeout=20)
         
         cursor = conn.cursor()
-        insert_query="""INSERT INTO public.readings("device_id","Ax","Ay","Az","Gx","Gy","Gz","BPM","Date","Time") VALUES 
-                        (%(device_id)s,%(Ax)s,%(Ay)s,%(Az)s,%(Gx)s,%(Gy)s,%(Gz)s,%(BPM)s,%(Date)s,%(Time)s) 
+        insert_query="""INSERT INTO public.readings("device_id","Acc","Gyro","Temp","BPM","Date","Time") VALUES 
+                        (%(device_id)s,%(Acc)s,%(Gyro)s,%(Temp)s,%(BPM)s,%(Date)s,%(Time)s) 
                         RETURNING id;"""
-        records_to_insert= {"Ax":float(body["ax"]),"Ay":float(body["ay"]),"Az":float(body["az"]),"Gx":float(body["gx"]),
-                            "Gy":float(body["gy"]),"Gz":float(body["gz"]),"BPM":int(body["BPM"]),"device_id":int(body["device_id"]),
+        records_to_insert= {"Acc":body["Acc"],"Gyro":body["Gcc"],
+                            "Temp":float(body["Temp"]),"BPM":int(body["BPM"]),"device_id":int(body["device_id"]),
                             "Date":str(body["Date"]),"Time":str(body["Time"])}
         cursor.execute(insert_query,records_to_insert)
         conn.commit()

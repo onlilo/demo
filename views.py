@@ -8,6 +8,7 @@ from .pushdata import push2dB
 from .customer_login import Login
 from .token_validation import token_authentication
 from .devices import Device
+from .SourceData import ViewData
 
 
 def health(request):
@@ -72,4 +73,16 @@ def activity_details(request):
             result = device_class.activity_list()
             return JsonResponse(result,safe=False)
     except :
+            return JsonResponse ({"status":"Fail","status_code":500})
+
+@csrf_exempt
+@token_authentication
+def view_sourcedata(request):
+    try:
+        if 'application/json' in request.META['CONTENT_TYPE']:
+            json_data= json.loads(request.body) 
+            source_data_class = ViewData(json_data)
+            result = source_data_class.view_data()
+            return JsonResponse(result,safe=False)
+    except:
             return JsonResponse ({"status":"Fail","status_code":500})

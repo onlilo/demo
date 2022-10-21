@@ -59,14 +59,6 @@ class Device(object):
             return(device_data.to_dict('records'))
         except:
             return {"Status":"Fail","status_code":500}
-        
-# data = {
-#     "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2NjYxNzQwNDJ9.z5L2634hJWnk_6od9QLPayRbaStI-pP27Om2Z7li8Lo",
-#     "status_code": 200,
-#     "id":3
-# }            
-# classs = Device(data)
-# result = classs.activity_list()
-# print(result)
+
 
 
