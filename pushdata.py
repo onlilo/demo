@@ -1,4 +1,7 @@
 import psycopg2
+import nums_from_string
+import datetime
+
 from .config import db_config
 
 def push2dB(body):
@@ -10,12 +13,15 @@ def push2dB(body):
                                 connect_timeout=20)
         
         cursor = conn.cursor()
+        date = body["Time"].split(" ")[1]
+        dt = datetime.datetime.strptime(date, '%d/%m/%Y')
+        dt =  ('{0}-{1}-{2:02}'.format(dt.year, dt.month, dt.day ))
         insert_query="""INSERT INTO public.readings("device_id","Acc","Gyro","Temp","BPM","Date","Time") VALUES 
                         (%(device_id)s,%(Acc)s,%(Gyro)s,%(Temp)s,%(BPM)s,%(Date)s,%(Time)s) 
                         RETURNING id;"""
         records_to_insert= {"Acc":body["Acc"],"Gyro":body["Gcc"],
-                            "Temp":float(body["Temp"]),"BPM":int(body["BPM"]),"device_id":int(body["device_id"]),
-                            "Date":str(body["Date"]),"Time":str(body["Time"])}
+                            "Temp":float(body["Temp"]),"BPM":int(nums_from_string.get_nums(body["BPM"])[0]),"device_id":int(body["device_id"]),
+                            "Date":dt,"Time":body["Time"].split(" ")[0]}
         cursor.execute(insert_query,records_to_insert)
         conn.commit()
         cursor.close()
