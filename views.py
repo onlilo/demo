@@ -34,8 +34,8 @@ def login(request):
             login_class = Login(json_data)
             result = login_class.user_authentication()
             return JsonResponse(result, safe=False)
-    except:
-        return JsonResponse({"status_code":500,"status":"Fail"})
+    except Exception as e:
+        return JsonResponse({"status_code":500,"error":str(e)})
     
 @csrf_exempt
 @token_authentication
