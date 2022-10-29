@@ -1,7 +1,6 @@
 import psycopg2
 import nums_from_string
 import datetime
-
 from .config import db_config
 
 def push2dB(body):
@@ -20,7 +19,7 @@ def push2dB(body):
                         (%(device_id)s,%(Acc)s,%(Gyro)s,%(Temp)s,%(BPM)s,%(Date)s,%(Time)s) 
                         RETURNING id;"""
         records_to_insert= {"Acc":body["Acc"],"Gyro":body["Gcc"],
-                            "Temp":float(body["Temp"]),"BPM":int(nums_from_string.get_nums(body["BPM"])[0]),"device_id":int(body["device_id"]),
+                            "Temp":float(body["Temp"]),"BPM":float(body["BPM"]),"device_id":3,
                             "Date":dt,"Time":body["Time"].split(" ")[0]}
         cursor.execute(insert_query,records_to_insert)
         conn.commit()
@@ -29,3 +28,4 @@ def push2dB(body):
         return {"message": "Data successfully inserted"}
     except Exception as e:
         return {"message": str(e)}
+

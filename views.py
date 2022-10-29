@@ -22,8 +22,8 @@ def data2dB(request):
             json_data= json.loads(request.body)
             result = push2dB(json_data)
             return JsonResponse({"Message":result["message"]})
-    except:
-            return JsonResponse ({"status":"Fail","status_code":500})
+    except Exception as e:
+        return JsonResponse({"status_code":500,"error":str(e)})
 
 @csrf_exempt
 #@api_view(['POST'])
@@ -34,8 +34,8 @@ def login(request):
             login_class = Login(json_data)
             result = login_class.user_authentication()
             return JsonResponse(result, safe=False)
-    except Exception as e:
-        return JsonResponse({"status_code":500,"error":str(e)})
+    except:
+        return JsonResponse({"status_code":500,"status":"Fail"})
     
 @csrf_exempt
 @token_authentication
