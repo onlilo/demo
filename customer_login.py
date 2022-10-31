@@ -49,10 +49,10 @@ class Login(object):
                     }
                     jwt_token = jwt.encode(payload, self.JWT_SECRET, algorithm = self.JWT_ALGORITHM)
                     token = jwt_token.decode('utf-8')
-                    return {"token":token,"status_code":200}
+                    return {"token":token}
                 else:
-                    return {"Status":"Fail","status_code":500}                    
-        except:
+                    return {"Status":"Fail","error":"Invalid username or password"}                    
+        except Exception as e :
             self.conn.close()
-            return {"Status":"Fail","status_code":500}
+            return {"status":"Fail","error":str(e)}
         

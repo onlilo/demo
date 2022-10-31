@@ -12,8 +12,7 @@ from .config import db_config
 
 class ViewData(object):
     def __init__(self,data):
-        self.data = data
-       
+        self.data = data       
         self.conn = psycopg2.connect(user = db_config['user'],
                                 password = db_config['password'],
                                 host = db_config['host'],
@@ -33,9 +32,9 @@ class ViewData(object):
             source_data = source_data.to_dict('records')
             self.conn.close()          
             return source_data
-        except:
+        except Exception as e:
             self.conn.close()
-            return {"Status":"Fail","status_code":500}
+            return {"status":"Fail","error":str(e)}
         
     def update_data(self):
         try:
@@ -49,10 +48,11 @@ class ViewData(object):
             self.conn.commit()
             self.cur.close()
             self.conn.close()
-            return {"Status":"Success","status_code":200}
-        except:
+            return {"Status":"Success"}
+        except Exception as e:
             self.cur.close()
             self.conn.close()
-            return {"Status":"Fail","status_code":500}
+            return {"status":"Fail","error":str(e)}
+
 
 

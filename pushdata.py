@@ -27,5 +27,5 @@ def push2dB(body):
         conn.close()
         return {"message": "Data successfully inserted"}
     except Exception as e:
-        return {"message": str(e)}
+        return {"status":"Fail","error":str(e)}
 

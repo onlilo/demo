@@ -36,8 +36,8 @@ class Device(object):
                 return {"status":"Fail","status_code":401,"Message":"No devices registered"}        
             else:
                 return(device_data.to_dict('records'))
-        except:
-            return {"Status":"Fail","status_code":500}
+        except Exception as e:
+            return {"status":"Fail","error":str(e)}
             
     def modify_device_details(self):
         try:
@@ -47,8 +47,8 @@ class Device(object):
             device_data =  pd.read_sql(select_qry,self.conn,params =select_qry_dict)
             self.conn.close()
             return device_data.to_dict('records')
-        except:
-            return {"Status":"Fail","status_code":500}
+        except Exception as e:
+            return {"status":"Fail","error":str(e)}
             
     def activity_list(self):
         try:
@@ -57,8 +57,8 @@ class Device(object):
             device_data =  pd.read_sql(select_qry,self.conn,params =select_qry_dict)
             self.conn.close()      
             return(device_data.to_dict('records'))
-        except:
-            return {"Status":"Fail","status_code":500}
+        except Exception as e:
+            return {"status":"Fail","error":str(e)}
 
 
 

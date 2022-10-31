@@ -12,7 +12,7 @@ from .SourceData import ViewData
 
 
 def health(request):
-    return JsonResponse({"status":200,"Message":"API Running"})
+    return JsonResponse({"status":"Success","Message":"API Running"})
 
 @csrf_exempt
 # @token_authentication
@@ -23,7 +23,7 @@ def data2dB(request):
             result = push2dB(json_data)
             return JsonResponse({"Message":result["message"]})
     except Exception as e:
-        return JsonResponse({"status_code":500,"error":str(e)})
+        return JsonResponse({"status":"Fail","error":str(e)})
 
 @csrf_exempt
 #@api_view(['POST'])
@@ -34,8 +34,8 @@ def login(request):
             login_class = Login(json_data)
             result = login_class.user_authentication()
             return JsonResponse(result, safe=False)
-    except:
-        return JsonResponse({"status_code":500,"status":"Fail"})
+    except Exception as e:
+        return JsonResponse({"status":"Fail","error":str(e)})
     
 @csrf_exempt
 @token_authentication
@@ -47,8 +47,8 @@ def device_list(request):
             device_class = Device(json_data)
             result = device_class.device_details()
             return JsonResponse(result,safe=False)
-    except :
-            return JsonResponse ({"status":"Fail","status_code":500})
+    except Exception as e:
+            return JsonResponse({"status":"Fail","error":str(e)})
         
 @csrf_exempt
 @token_authentication
@@ -59,9 +59,9 @@ def update_device(request):
             device_class = Device(json_data)
             result = device_class.modify_device_details()
             return JsonResponse(result,safe=False)
-    except:
-            return JsonResponse ({"status":"Fail","status_code":500})
-        
+    except Exception as e:
+        return JsonResponse({"status":"Fail","error":str(e)})
+
 @csrf_exempt
 @token_authentication
 def activity_details(request):
@@ -72,8 +72,8 @@ def activity_details(request):
             device_class = Device(json_data)
             result = device_class.activity_list()
             return JsonResponse(result,safe=False)
-    except :
-            return JsonResponse ({"status":"Fail","status_code":500})
+    except Exception as e:
+            return JsonResponse({"status":"Fail","error":str(e)})
 
 @csrf_exempt
 @token_authentication
@@ -84,8 +84,8 @@ def view_sourcedata(request):
             source_data_class = ViewData(json_data)
             result = source_data_class.view_data()
             return JsonResponse(result,safe=False)
-    except:
-            return JsonResponse ({"status":"Fail","status_code":500})
+    except Exception as e:
+            return JsonResponse({"status":"Fail","error":str(e)})
         
 @csrf_exempt
 @token_authentication
@@ -96,6 +96,6 @@ def edit_sourcedata(request):
             source_data_class = ViewData(json_data)
             result = source_data_class.update_data()
             return JsonResponse(result,safe=False)
-    except:
-            return JsonResponse ({"status":"Fail","status_code":500})
+    except Exception as e:
+            return JsonResponse({"status":"Fail","error":str(e)})
 
