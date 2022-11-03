@@ -13,4 +13,5 @@ urlpatterns = [
     path('get_activities/',views.activity_details,name='activity_details'),
     path('get_sourcedata/',views.view_sourcedata,name='view_sourcedata'),
     path('update_sourcedata/',views.edit_sourcedata,name='edit_sourcedata'),
+    path('det_dashdata/',views.get_analytics_data,name='get_analytics_data'),
 ]

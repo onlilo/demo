@@ -9,7 +9,7 @@ from .customer_login import Login
 from .token_validation import token_authentication
 from .devices import Device
 from .SourceData import ViewData
-
+from .dashboard import Dash
 
 def health(request):
     return JsonResponse({"status":"Success","Message":"API Running"})
@@ -99,3 +99,14 @@ def edit_sourcedata(request):
     except Exception as e:
             return JsonResponse({"status":"Fail","error":str(e)})
 
+@csrf_exempt
+@token_authentication
+def get_analytics_data(request):
+    try:
+        if 'application/json' in request.META['CONTENT_TYPE']:
+            json_data= json.loads(request.body) 
+            analytics_data_class = Dash(json_data)
+            result = analytics_data_class.GetData()
+            return JsonResponse(result,safe=False)
+    except Exception as e:
+            return JsonResponse({"status":"Fail","error":str(e)})
