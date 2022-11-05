@@ -48,7 +48,7 @@ class Dash(object):
                             activities = dash_data_copy['activity'].tolist()
                             Activity_count = round(activities.count(Activity)/60)
                             print(activities.count(Activity))
-                            if Activity_count>0:
+                            if Activity_count>=0:
                                self.myDict[Activity]["duration"].append(Activity_count)
                                if int(self.from_to[time_range][0].split(":")[0])==0:
                                    self.myDict[Activity]["time"].append("12AM")
