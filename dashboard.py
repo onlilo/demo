@@ -106,8 +106,9 @@ class Dash(object):
                     SubDict["activity"] =entries 
                     SubDict["time"] = self.myDict[entries]["time"]
                     SubDict["duration"] = self.myDict[entries]["duration"]
-                    filtered_duration = filter(lambda x: isinstance(x, int), self.myDict[entries]["duration"])
-                    SubDict["total_duration"] = sum(map(int,filtered_duration))
+                    filtered_duration = filter(lambda x: len(x)>0, self.myDict[entries]["duration"])
+                    total_duaration = map(int,list(filtered_duration))
+                    SubDict["total_duration"] = sum(total_duaration)
                     self.MainList.append(SubDict)
             else:
                 pass
@@ -119,7 +120,7 @@ class Dash(object):
             return {"status":"Fail","error":str(e)}
             
 
-# data = {"from":"2022-10-29","to":"2022-10-29"}       
+# data = {"from":"2022-11-07","to":"2022-11-07"}       
 # cls = Dash(data)
 # result = cls.GetData()
 # print(result)
