@@ -47,9 +47,8 @@ class Dash(object):
                         for Activity in activity_list:
                             activities = dash_data_copy['activity'].tolist()
                             Activity_count = round(activities.count(Activity)/60)
-                            print(activities.count(Activity))
                             if Activity_count>=0:
-                               self.myDict[Activity]["duration"].append(Activity_count)
+                               self.myDict[Activity]["duration"].append(str(Activity_count))
                                if int(self.from_to[time_range][0].split(":")[0])==0:
                                    self.myDict[Activity]["time"].append("12AM")
                                elif int(self.from_to[time_range][0].split(":")[0])==1:
@@ -106,7 +105,8 @@ class Dash(object):
                     SubDict = {}
                     SubDict["activity"] =entries 
                     SubDict["time"] = self.myDict[entries]["time"]
-                    SubDict["duration"] = self.myDict[entries]["duration"]
+                    # SubDict["duration"] = self.myDict[entries]["duration"]
+                    SubDict["duration"] = 100
                     SubDict["total_duration"] = sum(self.myDict[entries]["duration"])
                     self.MainList.append(SubDict)
             else:
