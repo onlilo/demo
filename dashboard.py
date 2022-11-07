@@ -105,9 +105,9 @@ class Dash(object):
                     SubDict = {}
                     SubDict["activity"] =entries 
                     SubDict["time"] = self.myDict[entries]["time"]
-                    # SubDict["duration"] = self.myDict[entries]["duration"]
-                    SubDict["duration"] = 100
-                    SubDict["total_duration"] = sum(self.myDict[entries]["duration"])
+                    SubDict["duration"] = self.myDict[entries]["duration"]
+                    # SubDict["total_duration"] = sum(self.myDict[entries]["duration"])
+                    SubDict["total_duration"] = 100
                     self.MainList.append(SubDict)
             else:
                 pass
