@@ -106,8 +106,8 @@ class Dash(object):
                     SubDict["activity"] =entries 
                     SubDict["time"] = self.myDict[entries]["time"]
                     SubDict["duration"] = self.myDict[entries]["duration"]
-                    SubDict["total_duration"] = sum(map(int,self.myDict[entries]["duration"]))
-                    SubDict["total_duration"] = 100
+                    filtered_duration = filter(lambda x: isinstance(x, int), self.myDict[entries]["duration"])
+                    SubDict["total_duration"] = sum(map(int,filtered_duration))
                     self.MainList.append(SubDict)
             else:
                 pass
