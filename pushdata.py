@@ -15,12 +15,12 @@ def push2dB(body):
         date = body["Time"].split(" ")[1]
         dt = datetime.datetime.strptime(date, '%d/%m/%Y')
         dt =  ('{0}-{1}-{2:02}'.format(dt.year, dt.month, dt.day ))
-        insert_query="""INSERT INTO public.readings("device_id","Acc","Gyro","Temp","BPM","Date","Time","activity") VALUES 
-                        (%(device_id)s,%(Acc)s,%(Gyro)s,%(Temp)s,%(BPM)s,%(Date)s,%(Time)s,%(activity)s) 
+        insert_query="""INSERT INTO public.readings("device_id","Acc","Gyro","Temp","BPM","Date","Time") VALUES 
+                        (%(device_id)s,%(Acc)s,%(Gyro)s,%(Temp)s,%(BPM)s,%(Date)s,%(Time)s) 
                         RETURNING id;"""
         records_to_insert= {"Acc":body["Acc"],"Gyro":body["Gcc"],
                             "Temp":float(body["Temp"]),"BPM":float(body["BPM"]),"device_id":3,
-                            "Date":dt,"Time":body["Time"].split(" ")[0],"activity":body["activity"]}
+                            "Date":dt,"Time":body["Time"].split(" ")[0]}
         cursor.execute(insert_query,records_to_insert)
         conn.commit()
         cursor.close()
