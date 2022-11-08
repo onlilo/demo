@@ -25,6 +25,7 @@ class Dash(object):
                    ("14:00:00","14:59:59"),("15:00:00","15:59:59"),("16:00:00","16:59:59"),("17:00:00","18:59:59"),
                    ("19:00:00","19:59:59"),("20:00:00","20:59:59"),("21:00:00","21:59:59"),("22:00:00","22:59:59"),
                    ("23:00:00","23:59:59"),("24:00:00","24:59:59")]
+        self.MainDict = {"Activities":[],"params":[]}
         self.MainList = []
     def GetData(self):
         try:
@@ -119,27 +120,32 @@ class Dash(object):
                                 self.myDict[Activity]["duration"].append("")
                 for entries in self.myDict:
                     SubDict = {}
-                    SubDict["activity"] =entries 
                     SubDict["time"] = self.myDict[entries]["time"]
                     SubDict["duration"] = self.myDict[entries]["duration"]  
                     filtered_duration =  [int(x) for x in self.myDict[entries]["duration"] if x!="" ] 
                     if entries == "BPM":
+                        SubDict["param"] =entries 
                         try:
                             SubDict["total_duration"] = round(sum(filtered_duration)/len(filtered_duration))
                         except:
                             SubDict["total_duration"] = 0  
+                        self.MainDict["params"].append(SubDict)
                     elif entries == "TEMP":
+                        SubDict["param"] =entries 
                         try:
                             SubDict["total_duration"] = round(sum(filtered_duration)/len(filtered_duration))
                         except:
-                            SubDict["total_duration"] = 0                     
+                            SubDict["total_duration"] = 0   
+                        self.MainDict["params"].append(SubDict)
                     else:
+                        SubDict["activity"] =entries
                         SubDict["total_duration"] = sum(filtered_duration)
-                    self.MainList.append(SubDict)
+                        self.MainDict["Activities"].append(SubDict)
             else:
                 pass
             self.conn.close()
-            return self.MainList
+            self.MainList.append(self.MainDict)
+            return self.MainDict
         
         except Exception as e:
             self.conn.close()
