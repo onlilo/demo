@@ -29,6 +29,7 @@ class ViewData(object):
             source_data =  pd.read_sql(select_qry,self.conn,params =select_qry_dict)
             source_data = source_data.fillna("")
             source_data = source_data.drop(["id"], axis=1)
+            source_data = source_data.sort_values(by=['Time'])
             source_data = source_data.to_dict('records')
             self.conn.close()          
             return source_data
