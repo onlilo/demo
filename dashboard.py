@@ -123,7 +123,10 @@ class Dash(object):
                             else:
                                 if Activity_count>0:
                                     if self.myDict[Activity]["duration"][Index]!="":
-                                        self.myDict[Activity]["duration"][Index] = str(int(self.myDict[Activity]["duration"][Index])+Activity_count)
+                                        if Activity == "BPM" or Activity =="TEMP":
+                                            self.myDict[Activity]["duration"][Index] = str(round((int(self.myDict[Activity]["duration"][Index])+Activity_count)/2))
+                                        else:
+                                            self.myDict[Activity]["duration"][Index] = str(int(self.myDict[Activity]["duration"][Index])+Activity_count)
                                     else:
                                        self.myDict[Activity]["duration"][Index] = self.myDict[Activity]["duration"][Index]+str(Activity_count)  
                                 else:
@@ -162,7 +165,7 @@ class Dash(object):
             return {"status":"Fail","error":str(e)}
             
 
-# data = {"from":"2022-11-07","to":"2022-11-08","id":3}       
+# data = {"from":"2022-10-07","to":"2022-11-08","id":3}       
 # cls = Dash(data)
 # result = cls.GetData()
 # print(result)
