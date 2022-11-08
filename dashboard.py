@@ -26,25 +26,27 @@ class Dash(object):
                    ("19:00:00","19:59:59"),("20:00:00","20:59:59"),("21:00:00","21:59:59"),("22:00:00","22:59:59"),
                    ("23:00:00","23:59:59"),("24:00:00","24:59:59")]
         self.MainDict = {"Activities":[],"params":[]}
-        self.MainList = []
+        self.first_date = True
     def GetData(self):
         try:
             from_date = self.data["from"]
             to_date = self.data["to"]
             device_id = int(self.data["id"])
-            if from_date == to_date:
-                select_qry = """SELECT "Time","activity","BPM","Temp" FROM public.readings where "Date" = %(date)s AND "device_id" = %(device_id)s;"""
-                select_qry_dict={"date":from_date,"device_id":device_id}
-                dash_data =  pd.read_sql(select_qry,self.conn,params =select_qry_dict)
-                dash_data = dash_data.drop_duplicates().sort_values(by=['Time'])
-                activity_list = list(dash_data.activity.unique())
-                activity_list.append("BPM")
-                activity_list.append("TEMP")
-                if None in activity_list:
-                    activity_list.remove(None)
-                self.myDict = {key: {"time":[],"duration":[],"total_duration":None} for key in activity_list}
-                for time_range in range(len(self.from_to)):
+            select_qry = """SELECT "Date","Time","activity","BPM","Temp" FROM public.readings where "Date" >= %(from_date)s AND "Date" <= %(to_date)s AND "device_id" = %(device_id)s;"""
+            select_qry_dict={"from_date":from_date,"to_date":to_date,"device_id":device_id}
+            dash_data =  pd.read_sql(select_qry,self.conn,params =select_qry_dict)
+            dash_data = dash_data.drop_duplicates().sort_values(by=['Time'])
+            days = sorted(list(dash_data.Date.unique()))
+            activity_list = list(dash_data.activity.unique())
+            activity_list.append("BPM")
+            activity_list.append("TEMP")
+            if None in activity_list:
+                activity_list.remove(None)
+            self.myDict = {key: {"time":[],"duration":[],"total_duration":None} for key in activity_list}
+            for day in days:
+                for time_range,Index in enumerate(range(len(self.from_to))):
                     dash_data_copy = dash_data.copy()
+                    dash_data_copy = dash_data_copy[(dash_data_copy["Date"] == day)]
                     dash_data_copy = dash_data_copy[dash_data_copy['Time'].between(self.from_to[time_range][0], self.from_to[time_range][1])]
                     if len(activity_list)>0:
                         for Activity in activity_list:
@@ -63,88 +65,96 @@ class Dash(object):
                             else:
                                 activities = dash_data_copy['activity'].tolist()
                                 Activity_count = round(activities.count(Activity)/60)
+                            if self.first_date:
+                                if int(self.from_to[time_range][0].split(":")[0])==0:
+                                    self.myDict[Activity]["time"].append("12AM")
+                                elif int(self.from_to[time_range][0].split(":")[0])==1:
+                                    self.myDict[Activity]["time"].append("1AM")
+                                elif int(self.from_to[time_range][0].split(":")[0])==2:
+                                    self.myDict[Activity]["time"].append("2AM")
+                                elif int(self.from_to[time_range][0].split(":")[0])==3:
+                                    self.myDict[Activity]["time"].append("3AM")
+                                elif int(self.from_to[time_range][0].split(":")[0])==4:
+                                    self.myDict[Activity]["time"].append("4AM")
+                                elif int(self.from_to[time_range][0].split(":")[0])==5:
+                                    self.myDict[Activity]["time"].append("5AM")
+                                elif int(self.from_to[time_range][0].split(":")[0])==6:
+                                    self.myDict[Activity]["time"].append("6AM")
+                                elif int(self.from_to[time_range][0].split(":")[0])==7:
+                                    self.myDict[Activity]["time"].append("7AM")
+                                elif int(self.from_to[time_range][0].split(":")[0])==8:
+                                    self.myDict[Activity]["time"].append("8AM")
+                                elif int(self.from_to[time_range][0].split(":")[0])==9:
+                                    self.myDict[Activity]["time"].append("9AM")
+                                elif int(self.from_to[time_range][0].split(":")[0])==10:
+                                    self.myDict[Activity]["time"].append("10AM")
+                                elif int(self.from_to[time_range][0].split(":")[0])==11:
+                                    self.myDict[Activity]["time"].append("11AM")
+                                elif int(self.from_to[time_range][0].split(":")[0])==12:
+                                    self.myDict[Activity]["time"].append("12PM")
+                                elif int(self.from_to[time_range][0].split(":")[0])==13:
+                                    self.myDict[Activity]["time"].append("1PM")
+                                elif int(self.from_to[time_range][0].split(":")[0])==14:
+                                    self.myDict[Activity]["time"].append("2PM")
+                                elif int(self.from_to[time_range][0].split(":")[0])==15:
+                                    self.myDict[Activity]["time"].append("3PM")
+                                elif int(self.from_to[time_range][0].split(":")[0])==16:
+                                    self.myDict[Activity]["time"].append("4PM")
+                                elif int(self.from_to[time_range][0].split(":")[0])==17:
+                                    self.myDict[Activity]["time"].append("5PM")
+                                elif int(self.from_to[time_range][0].split(":")[0])==18:
+                                    self.myDict[Activity]["time"].append("6PM")
+                                elif int(self.from_to[time_range][0].split(":")[0])==19:
+                                    self.myDict[Activity]["time"].append("7PM")
+                                elif int(self.from_to[time_range][0].split(":")[0])==20:
+                                    self.myDict[Activity]["time"].append("8PM")
+                                elif int(self.from_to[time_range][0].split(":")[0])==21:
+                                    self.myDict[Activity]["time"].append("9PM")
+                                elif int(self.from_to[time_range][0].split(":")[0])==22:
+                                    self.myDict[Activity]["time"].append("10PM")
+                                elif int(self.from_to[time_range][0].split(":")[0])==23:
+                                    self.myDict[Activity]["time"].append("11PM") 
+                                else:
+                                    pass
+                                if Activity_count>0:
+                                    self.myDict[Activity]["duration"].append(str(Activity_count))
+                                else:
+                                    self.myDict[Activity]["duration"].append("")
+                            else:
+                                if Activity_count>0:
+                                    if self.myDict[Activity]["duration"][Index]!="":
+                                        self.myDict[Activity]["duration"][Index] = str(int(self.myDict[Activity]["duration"][Index])+Activity_count)
+                                    else:
+                                       self.myDict[Activity]["duration"][Index] = self.myDict[Activity]["duration"][Index]+str(Activity_count)  
+                                else:
+                                    self.myDict[Activity]["duration"][Index] = self.myDict[Activity]["duration"][Index]+""                                  
+                        if Index ==23:
+                            self.first_date = False
 
-                            if int(self.from_to[time_range][0].split(":")[0])==0:
-                                self.myDict[Activity]["time"].append("12AM")
-                            elif int(self.from_to[time_range][0].split(":")[0])==1:
-                                self.myDict[Activity]["time"].append("1AM")
-                            elif int(self.from_to[time_range][0].split(":")[0])==2:
-                                self.myDict[Activity]["time"].append("2AM")
-                            elif int(self.from_to[time_range][0].split(":")[0])==3:
-                                self.myDict[Activity]["time"].append("3AM")
-                            elif int(self.from_to[time_range][0].split(":")[0])==4:
-                                self.myDict[Activity]["time"].append("4AM")
-                            elif int(self.from_to[time_range][0].split(":")[0])==5:
-                                self.myDict[Activity]["time"].append("5AM")
-                            elif int(self.from_to[time_range][0].split(":")[0])==6:
-                                self.myDict[Activity]["time"].append("6AM")
-                            elif int(self.from_to[time_range][0].split(":")[0])==7:
-                                self.myDict[Activity]["time"].append("7AM")
-                            elif int(self.from_to[time_range][0].split(":")[0])==8:
-                                self.myDict[Activity]["time"].append("8AM")
-                            elif int(self.from_to[time_range][0].split(":")[0])==9:
-                                self.myDict[Activity]["time"].append("9AM")
-                            elif int(self.from_to[time_range][0].split(":")[0])==10:
-                                self.myDict[Activity]["time"].append("10AM")
-                            elif int(self.from_to[time_range][0].split(":")[0])==11:
-                                self.myDict[Activity]["time"].append("11AM")
-                            elif int(self.from_to[time_range][0].split(":")[0])==12:
-                                self.myDict[Activity]["time"].append("12PM")
-                            elif int(self.from_to[time_range][0].split(":")[0])==13:
-                                self.myDict[Activity]["time"].append("1PM")
-                            elif int(self.from_to[time_range][0].split(":")[0])==14:
-                                self.myDict[Activity]["time"].append("2PM")
-                            elif int(self.from_to[time_range][0].split(":")[0])==15:
-                                self.myDict[Activity]["time"].append("3PM")
-                            elif int(self.from_to[time_range][0].split(":")[0])==16:
-                                self.myDict[Activity]["time"].append("4PM")
-                            elif int(self.from_to[time_range][0].split(":")[0])==17:
-                                self.myDict[Activity]["time"].append("5PM")
-                            elif int(self.from_to[time_range][0].split(":")[0])==18:
-                                self.myDict[Activity]["time"].append("6PM")
-                            elif int(self.from_to[time_range][0].split(":")[0])==19:
-                                self.myDict[Activity]["time"].append("7PM")
-                            elif int(self.from_to[time_range][0].split(":")[0])==20:
-                                self.myDict[Activity]["time"].append("8PM")
-                            elif int(self.from_to[time_range][0].split(":")[0])==21:
-                                self.myDict[Activity]["time"].append("9PM")
-                            elif int(self.from_to[time_range][0].split(":")[0])==22:
-                                self.myDict[Activity]["time"].append("10PM")
-                            elif int(self.from_to[time_range][0].split(":")[0])==23:
-                                self.myDict[Activity]["time"].append("11PM") 
-                            else:
-                                pass
-                            if Activity_count>0:
-                                self.myDict[Activity]["duration"].append(str(Activity_count))
-                            else:
-                                self.myDict[Activity]["duration"].append("")
-                for entries in self.myDict:
-                    SubDict = {}
-                    SubDict["time"] = self.myDict[entries]["time"]
-                    SubDict["duration"] = self.myDict[entries]["duration"]  
-                    filtered_duration =  [int(x) for x in self.myDict[entries]["duration"] if x!="" ] 
-                    if entries == "BPM":
-                        SubDict["param"] =entries 
-                        try:
-                            SubDict["total_duration"] = round(sum(filtered_duration)/len(filtered_duration))
-                        except:
-                            SubDict["total_duration"] = 0  
-                        self.MainDict["params"].append(SubDict)
-                    elif entries == "TEMP":
-                        SubDict["param"] =entries 
-                        try:
-                            SubDict["total_duration"] = round(sum(filtered_duration)/len(filtered_duration))
-                        except:
-                            SubDict["total_duration"] = 0   
-                        self.MainDict["params"].append(SubDict)
-                    else:
-                        SubDict["activity"] =entries
-                        SubDict["total_duration"] = sum(filtered_duration)
-                        self.MainDict["Activities"].append(SubDict)
-            else:
-                pass
+            for entries in self.myDict:
+                SubDict = {}
+                SubDict["time"] = self.myDict[entries]["time"]
+                SubDict["duration"] = self.myDict[entries]["duration"]  
+                filtered_duration =  [int(x) for x in self.myDict[entries]["duration"] if x!="" ] 
+                if entries == "BPM":
+                    SubDict["param"] =entries 
+                    try:
+                        SubDict["total_duration"] = round(sum(filtered_duration)/len(filtered_duration))
+                    except:
+                        SubDict["total_duration"] = 0  
+                    self.MainDict["params"].append(SubDict)
+                elif entries == "TEMP":
+                    SubDict["param"] =entries 
+                    try:
+                        SubDict["total_duration"] = round(sum(filtered_duration)/len(filtered_duration))
+                    except:
+                        SubDict["total_duration"] = 0   
+                    self.MainDict["params"].append(SubDict)
+                else:
+                    SubDict["activity"] =entries
+                    SubDict["total_duration"] = sum(filtered_duration)
+                    self.MainDict["Activities"].append(SubDict)
             self.conn.close()
-            self.MainList.append(self.MainDict)
             return self.MainDict
         
         except Exception as e:
@@ -152,7 +162,7 @@ class Dash(object):
             return {"status":"Fail","error":str(e)}
             
 
-# data = {"from":"2022-11-07","to":"2022-11-07","id":3}       
+# data = {"from":"2022-11-07","to":"2022-11-08","id":3}       
 # cls = Dash(data)
 # result = cls.GetData()
 # print(result)
