@@ -8,8 +8,6 @@ Created on Thu Nov  3 10:57:08 2022
 
 import psycopg2
 import pandas as pd
-import numpy as np
-import statistics
 from .config import db_config
 
 class Dash(object):
@@ -34,11 +32,13 @@ class Dash(object):
             to_date = self.data["to"]
             device_id = int(self.data["id"])
             if from_date == to_date:
-                select_qry = """SELECT "Time","activity","BPM" FROM public.readings where "Date" = %(date)s AND "device_id" = %(device_id)s;"""
+                select_qry = """SELECT "Time","activity","BPM","Temp" FROM public.readings where "Date" = %(date)s AND "device_id" = %(device_id)s;"""
                 select_qry_dict={"date":from_date,"device_id":device_id}
                 dash_data =  pd.read_sql(select_qry,self.conn,params =select_qry_dict)
                 dash_data = dash_data.drop_duplicates().sort_values(by=['Time'])
                 activity_list = list(dash_data.activity.unique())
+                activity_list.append("BPM")
+                activity_list.append("TEMP")
                 if None in activity_list:
                     activity_list.remove(None)
                 self.myDict = {key: {"time":[],"duration":[],"total_duration":None} for key in activity_list}
@@ -47,8 +47,21 @@ class Dash(object):
                     dash_data_copy = dash_data_copy[dash_data_copy['Time'].between(self.from_to[time_range][0], self.from_to[time_range][1])]
                     if len(activity_list)>0:
                         for Activity in activity_list:
-                            activities = dash_data_copy['activity'].tolist()
-                            Activity_count = round(activities.count(Activity)/60)
+                            if Activity == "BPM":
+                                Activity_count = sum(dash_data_copy["BPM"].tolist())
+                                if Activity_count>0:
+                                    Activity_count = round(Activity_count/len(dash_data_copy["BPM"].tolist()))
+                                else:
+                                    pass     
+                            elif Activity == "TEMP":
+                                Activity_count = sum(dash_data_copy["Temp"].tolist())
+                                if Activity_count>0:
+                                    Activity_count = round(Activity_count/len(dash_data_copy["Temp"].tolist()))
+                                else:
+                                    pass                                  
+                            else:
+                                activities = dash_data_copy['activity'].tolist()
+                                Activity_count = round(activities.count(Activity)/60)
 
                             if int(self.from_to[time_range][0].split(":")[0])==0:
                                 self.myDict[Activity]["time"].append("12AM")
@@ -108,10 +121,20 @@ class Dash(object):
                     SubDict = {}
                     SubDict["activity"] =entries 
                     SubDict["time"] = self.myDict[entries]["time"]
-                    SubDict["duration"] = self.myDict[entries]["duration"]
-                    filtered_duration = filter(lambda x: len(x)>0, self.myDict[entries]["duration"])
-                    total_duaration = map(int,list(filtered_duration))
-                    SubDict["total_duration"] = sum(total_duaration)                                                             
+                    SubDict["duration"] = self.myDict[entries]["duration"]  
+                    filtered_duration =  [int(x) for x in self.myDict[entries]["duration"] if x!="" ] 
+                    if entries == "BPM":
+                        try:
+                            SubDict["total_duration"] = round(sum(filtered_duration)/len(filtered_duration))
+                        except:
+                            SubDict["total_duration"] = 0  
+                    elif entries == "TEMP":
+                        try:
+                            SubDict["total_duration"] = round(sum(filtered_duration)/len(filtered_duration))
+                        except:
+                            SubDict["total_duration"] = 0                     
+                    else:
+                        SubDict["total_duration"] = sum(filtered_duration)
                     self.MainList.append(SubDict)
             else:
                 pass
