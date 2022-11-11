@@ -26,7 +26,8 @@ def push2dB(body):
         last_update_query = """UPDATE public.devices
                                SET "battery" = %(battery)s, "last_active" = %(last_active)s WHERE "id" =%(id)s;"""
         
-        last_update_dict = {"device_name":"Device 1","battery":50,"last_active":body["Time"],"id":3} 
+        last_update_time = body["Time"].split(" ")[1] + " " + body["Time"].split(" ")[0]
+        last_update_dict = {"device_name":"Device 1","battery":50,"last_active":last_update_time,"id":3} 
         cursor.execute(last_update_query,last_update_dict)           
         conn.commit()
         cursor.close()
