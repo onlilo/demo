@@ -1,5 +1,4 @@
 import psycopg2
-import nums_from_string
 import datetime
 from .config import db_config
 
@@ -23,6 +22,12 @@ def push2dB(body):
                             "Temp":Temp,"BPM":float(body["BPM"]),"device_id":3,
                             "Date":dt,"Time":body["Time"].split(" ")[0]}
         cursor.execute(insert_query,records_to_insert)
+        conn.commit()
+        last_update_query = """UPDATE public.devices
+                               SET "battery" = %(battery)s, "last_active" = %(last_active)s WHERE "id" =%(id)s;"""
+        
+        last_update_dict = {"device_name":"Device 1","battery":50,"last_active":body["Time"],"id":3} 
+        cursor.execute(last_update_query,last_update_dict)           
         conn.commit()
         cursor.close()
         conn.close()
