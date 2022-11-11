@@ -22,7 +22,7 @@ class ViewData(object):
         
     def view_data(self):
         try:
-            device_id = self.data[["id"]]
+            device_id = self.data["id"]
             date = self.data["Date"]
             select_qry = """SELECT * FROM public.readings where "device_id" = %(device_id)s AND "Date" = %(date)s;"""
             select_qry_dict={"device_id":int(device_id),"date":date}
