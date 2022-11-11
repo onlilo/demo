@@ -22,7 +22,7 @@ class ViewData(object):
         
     def view_data(self):
         try:
-            device_id = self.data["id"]
+            device_id = self.data[["id"]]
             date = self.data["Date"]
             select_qry = """SELECT * FROM public.readings where "device_id" = %(device_id)s AND "Date" = %(date)s;"""
             select_qry_dict={"device_id":int(device_id),"date":date}
@@ -39,11 +39,11 @@ class ViewData(object):
         
     def update_data(self):
         try:
-            device_id = self.data["device_id"]
-            date = self.data["Date"]
-            time = self.data["Time"]
-            activity = self.data["activity"]
-            update_query = """UPDATE public.readings SET "activity" = %(activity)s WHERE "Date"= %(date)s AND "Time"= %(time)s AND "device_id"= %(device_id)s;"""
+            device_id = self.data[0]["device_id"]
+            date = tuple([ data["Date"] for data in self.data])
+            time = tuple([ data["Time"] for data in self.data])
+            activity = self.data[0]["activity"]
+            update_query = """UPDATE public.readings SET "activity" = %(activity)s WHERE "Date" in  %(date)s AND "Time" in %(time)s AND "device_id"= %(device_id)s;"""
             update_qry_dict={"device_id":int(device_id),"date":date,"time":time,"activity":activity}
             self.cur.execute(update_query,update_qry_dict)
             self.conn.commit()
