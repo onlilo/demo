@@ -62,7 +62,7 @@ class Dash(object):
                                     Activity_count = round(Activity_count/len(dash_data_copy["Temp"].tolist()))
                                 else:
                                     pass                                  
-                            else:
+                            else:                        
                                 activities = dash_data_copy['activity'].tolist()
                                 Activity_count = round(activities.count(Activity)/60)
                             if self.first_date:
@@ -165,7 +165,7 @@ class Dash(object):
             return {"status":"Fail","error":str(e)}
             
 
-# data = {"from":"2022-10-07","to":"2022-11-08","id":3}       
+# data = {"from":"2022-11-09","to":"2022-11-09","id":3}       
 # cls = Dash(data)
 # result = cls.GetData()
 # print(result)

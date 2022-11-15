@@ -55,6 +55,7 @@ class Device(object):
             select_qry = """SELECT "Id","activity" FROM public.activities"""
             select_qry_dict={}
             device_data =  pd.read_sql(select_qry,self.conn,params =select_qry_dict)
+            device_data = device_data.sort_values(['Id'], ascending=[False])
             self.conn.close()      
             return(device_data.to_dict('records'))
         except Exception as e:

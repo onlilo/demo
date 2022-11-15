@@ -43,6 +43,8 @@ class ViewData(object):
             date = tuple([ data["Date"] for data in self.data])
             time = tuple([ data["Time"] for data in self.data])
             activity = self.data[0]["activity"]
+            if activity == "No activity":
+                activity = None
             update_query = """UPDATE public.readings SET "activity" = %(activity)s WHERE "Date" in  %(date)s AND "Time" in %(time)s AND "device_id"= %(device_id)s;"""
             update_qry_dict={"device_id":int(device_id),"date":date,"time":time,"activity":activity}
             self.cur.execute(update_query,update_qry_dict)
